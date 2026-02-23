@@ -52,6 +52,9 @@ class NoteRepository {
   // TAMBAH CATATAN BARU
   Future<void> addNote(NoteModel note) async {
     try {
+      // TAMBAHKAN BARIS INI:
+      print("DEBUG PAYLOAD: ${note.toJson()}");
+
       await _client.from(AppConstants.tableNotes).insert(note.toJson());
     } catch (e) {
       throw Exception('Gagal simpan catatan: $e');

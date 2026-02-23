@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class GDriveService {
-  // PASTE URL WEB APP APPS SCRIPT KAMU DI SINI
-  final String _scriptUrl = "https://script.google.com/macros/s/AKfycbz2pobnsYPhpBH1Z37QwxcFbpe_04IcW5DvKATOXH_VvgrdQETIxN39sQOJhjUCSelZfg/exec";
+  final String _scriptUrl = "https://script.google.com/macros/s/AKfycbzwcSAb9MvcrwRc9TWiSJkyu-9_GUN2-cSqjKH-l2RMbtaaby54nHWzFxi9mDPAmYPMeA/exec";
 
   Future<String?> uploadImage(File imageFile) async {
     try {
-      // 1. Ubah gambar jadi teks (Base64)
+      print("GDRIVE: Membaca byte...");
       List<int> imageBytes = await imageFile.readAsBytes();
       String base64Image = base64Encode(imageBytes);
 
-      // 2. Kirim ke Google Apps Script
-      final response = await http.post(
+      // 1. Kirim POST Pertama
+      var response = await http.post(
         Uri.parse(_scriptUrl),
         body: {
           'data': base64Image,
@@ -22,10 +21,27 @@ class GDriveService {
         },
       );
 
+      print("GDRIVE STATUS AWAL: ${response.statusCode}");
+
+      // 2. JURUS PINDAH KAMAR: Jika dapet 302, kejar link-nya!
+      if (response.statusCode == 302) {
+        // Ambil link baru dari header 'location'
+        String? newUrl = response.headers['location'];
+        if (newUrl != null) {
+          print("GDRIVE: Mengejar link redirect...");
+          // Kita tembak link baru pake GET (Google maunya gitu)
+          response = await http.get(Uri.parse(newUrl));
+        }
+      }
+
+      print("GDRIVE FINAL STATUS: ${response.statusCode}");
+      print("GDRIVE FINAL BODY: ${response.body}");
+
       if (response.statusCode == 200) {
         final resData = jsonDecode(response.body);
         if (resData['status'] == 'success') {
-          return resData['url']; // Ini link gambar publiknya
+          print("MANTAP! LINK TEMBUS: ${resData['url']}");
+          return resData['url'];
         }
       }
       return null;

@@ -82,18 +82,16 @@ class _AddNoteViewState extends State<AddNoteView> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (_title.text.isEmpty || _content.text.isEmpty)
-                          return;
-
-                        // PANGGIL MAGIC DISINI
+                        if (_title.text.isEmpty || _content.text.isEmpty) return;
+                        
                         await noteVM.addNote(
                           folderId: widget.folderId,
                           title: _title.text,
                           content: _content.text,
-                          imageFile: _selectedImage,
+                          imageFile: _selectedImage, // <--- PASTIKAN INI ADA & TIDAK TYPO
                         );
-
-                        if (mounted) Navigator.pop(context); // Balik ke list
+                        
+                        if (mounted) Navigator.pop(context);
                       },
                       child: const Text("Simpan & Rangkum (AI)"),
                     ),
