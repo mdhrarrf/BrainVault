@@ -1,32 +1,36 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import '../constants/app_constants.dart';
 
 class GDriveService {
+  // PASTE URL WEB APP APPS SCRIPT KAMU DI SINI
+  final String _scriptUrl = "https://script.google.com/macros/s/AKfycbz2pobnsYPhpBH1Z37QwxcFbpe_04IcW5DvKATOXH_VvgrdQETIxN39sQOJhjUCSelZfg/exec";
+
   Future<String?> uploadImage(File imageFile) async {
     try {
-      // Ubah gambar jadi Base64 String
+      // 1. Ubah gambar jadi teks (Base64)
       List<int> imageBytes = await imageFile.readAsBytes();
       String base64Image = base64Encode(imageBytes);
 
-      // Kirim ke Google Apps Script
+      // 2. Kirim ke Google Apps Script
       final response = await http.post(
-        Uri.parse(AppConstants.gDriveScriptUrl),
+        Uri.parse(_scriptUrl),
         body: {
+          'data': base64Image,
           'filename': 'vault_${DateTime.now().millisecondsSinceEpoch}.jpg',
           'filetype': 'image/jpeg',
-          'data': base64Image,
         },
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return data['url']; // Kembalikan link gambar publik
+        final resData = jsonDecode(response.body);
+        if (resData['status'] == 'success') {
+          return resData['url']; // Ini link gambar publiknya
+        }
       }
       return null;
     } catch (e) {
-      print("Gagal upload gambar: $e");
+      print("GDRIVE ERROR: $e");
       return null;
     }
   }

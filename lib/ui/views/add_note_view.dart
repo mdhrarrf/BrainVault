@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +62,15 @@ class _AddNoteViewState extends State<AddNoteView> {
 
                   // Preview Gambar
                   _selectedImage != null
-                      ? Image.file(_selectedImage!, height: 200)
+                      ? (kIsWeb
+                            ? Image.network(
+                                _selectedImage!.path,
+                                height: 200,
+                              ) // Jika di Web pakai Network (Blob URL)
+                            : Image.file(
+                                _selectedImage!,
+                                height: 200,
+                              )) // Jika di HP pakai File
                       : OutlinedButton.icon(
                           onPressed: _pickImage,
                           icon: const Icon(Icons.image),

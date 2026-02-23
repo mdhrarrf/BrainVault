@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 
 class GeminiService {
   final String _apiKey = 'AIzaSyDTILwu9h5FS9_nKf8gurbX54ak81Iim6c';
