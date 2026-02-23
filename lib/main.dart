@@ -1,3 +1,4 @@
+import 'package:brainvault/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,7 @@ import 'data/repositories/note_repository.dart';
 import 'ui/viewmodels/auth_viewmodel.dart';
 import 'ui/viewmodels/folder_viewmodel.dart';
 import 'ui/viewmodels/note_viewmodel.dart';
-import 'ui/views/login_view.dart';
+import 'ui/views/auth_view.dart';
 import 'ui/views/home_view.dart';
 
 void main() async {
@@ -43,11 +44,7 @@ class BrainVaultApp extends StatelessWidget {
       child: MaterialApp(
         title: 'BrainVault',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorSchemeSeed: Colors.deepPurple,
-          brightness: Brightness.dark,
-        ),
+        theme: AppTheme.lightTheme,
         // Cek user sudah login atau belum
         home: Supabase.instance.client.auth.currentUser == null
             ? const AuthView()

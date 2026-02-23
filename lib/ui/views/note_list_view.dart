@@ -1,4 +1,5 @@
 import 'package:brainvault/ui/views/add_note_view.dart';
+import 'package:brainvault/ui/views/note_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/note_viewmodel.dart';
@@ -42,7 +43,12 @@ class _NoteListViewState extends State<NoteListView> {
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () {
-                    /* Nanti: Lihat detail catatan */
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NoteDetailView(note: note),
+                      ),
+                    );
                   },
                 );
               },
