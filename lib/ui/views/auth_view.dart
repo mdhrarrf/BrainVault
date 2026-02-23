@@ -39,13 +39,13 @@ class _AuthViewState extends State<AuthView> {
                   color: AppColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(
-                  Icons.psychology,
-                  size: 40,
-                  color: AppColors.primary,
+                // GANTI ICON LAMA DENGAN INI:
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 40,
+                  height: 40,
                 ),
               ),
-
               const SizedBox(height: 30),
 
               // 2. Judul & Subjudul
